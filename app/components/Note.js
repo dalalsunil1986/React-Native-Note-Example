@@ -6,43 +6,21 @@ import {View, Text, TextInput} from 'react-native';
 import styles from './../styles/';
 import * as actions from './../actions/';
 
-// export var Note = React.createClass({
-//   onChange(text) {
-//     var {dispatch} = this.props;
-//
-//     dispatch(actions.updateNote(this.props.id, text))
-//   },
-//   render() {
-//     var {id, createdAt, text} = this.props.note;
-//
-//     return (
-//       <View style={styles.noteContainer}>
-//         <Text>{id}</Text>
-//         <TextInput style={styles.noteTextInput} onChangeText={this.onChange} multiline={true} placeholder="Untitled Note" value={text}/>
-//       </View>
-//     );
-//   }
-// });
-
 export var Note = React.createClass({
-  getInitialState() {
-    return {
-      text: this.props.note.text
-    };
-  },
   onChange(text) {
     var {dispatch} = this.props;
 
-    this.setState({text})
-    dispatch(actions.updateNote(this.props.id, text))
+    var id = this.props.notes.filter((note) => note.id === this.props.id)[0].id
+
+    dispatch(actions.updateNote(id, text))
   },
   render() {
-    var {id, createdAt} = this.props.note;
-    var {text} = this.state;
-
+    var {id, createdAt, text} = this.props.notes.filter((note) => note.id === this.props.id)[0]
+    var formattedDate = moment.unix(createdAt).format('MMM, Do, YYYY @ h:mm a');
+    console.log('rendering text', text);
     return (
       <View style={styles.noteContainer}>
-        <Text>{moment.unix(createdAt).format('MMM, Do, YYYY @ h:mm a')}</Text>
+        <Text style={styles.noteTitle}>{formattedDate}</Text>
         <TextInput style={styles.noteTextInput} onChangeText={this.onChange} multiline={true} placeholder="Untitled Note" value={text}/>
       </View>
     );
@@ -51,7 +29,7 @@ export var Note = React.createClass({
 
 export var stateToProps = (state, props) => {
   return {
-    note: state.notes.filter((note) => note.id === props.id)[0]
+    notes: state.notes
   };
 };
 

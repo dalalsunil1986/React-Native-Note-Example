@@ -35,7 +35,7 @@ var routes = () => {
   var notes = {
     component: Notes,
     title: 'Notes',
-    rightButtonTitle: 'Create Note',
+    rightButtonTitle: 'Create',
     onRightButtonPress: function() {
       var noteId = store.dispatch(actions.startCreateNote());
       nav.push(note(noteId))

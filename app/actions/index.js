@@ -24,3 +24,10 @@ export var updateNote = (id, text) => {
     text
   };
 };
+
+export var deleteNote = (id) => {
+  return {
+    type: 'DELETE_NOTE',
+    id
+  };
+};

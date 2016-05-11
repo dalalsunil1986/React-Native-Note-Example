@@ -11,14 +11,17 @@ export var notesReducer = (state = [], action) => {
         }
       ];
     case 'DELETE_NOTE':
+      console.log('******** AFTER DLETE', state.filter((note) => {
+        return note.id !== action.id;
+      }));
       return state.filter((note) => {
         return note.id !== action.id;
       });
     case 'UPDATE_NOTE':
       return state.map((note) => {
         if (note.id === action.id) {
-          console.log('******** found action', note.text, action.text);
           note.text = action.text
+          console.log('updated note', note);
         }
         return note;
       });

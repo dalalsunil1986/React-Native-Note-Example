@@ -4,6 +4,8 @@ import {connect} from 'react-redux';
 import {View, Text, ListView, TouchableHighlight} from 'react-native';
 
 import styles from './../styles/';
+import * as actions from './../actions/';
+import NotesItem from './NotesItem'
 
 var dataSource = new ListView.DataSource({
   rowHasChanged: (r1, r2) => r1 !== r2
@@ -11,31 +13,24 @@ var dataSource = new ListView.DataSource({
 
 export var Notes = React.createClass({
   render() {
-    var {notes} = this.props;
+    var {notes, dispatch} = this.props;
+
     var dsNotes = dataSource.cloneWithRows(notes);
 
-    return (
-      <View>
-        <Text>Notes: {notes.length}</Text>
-        <ListView dataSource={dsNotes} automaticallyAdjustContentInsets={false} renderRow={(note) => {
-          var lines = note.text.split('\n');
+    console.log('NOTES RENDERING');
 
-          return (
-            <TouchableHighlight onPress={() => this.props.showNote(note.id)}>
-              <View>
-                <Text>{lines[0].length > 0 ? lines[0] : 'Untitle note'}</Text>
-                <Text>Created at: {moment.unix(note.createdAt).format('MMM, Do, YYYY @ h:mm a')}</Text>
-              </View>
-            </TouchableHighlight>
-          )
-        }}></ListView>
-      </View>
+    return (
+      <ListView dataSource={dsNotes} automaticallyAdjustContentInsets={false} renderRow={(note) => {
+        return <NotesItem {...note} showNote={this.props.showNote}></NotesItem>
+      }}></ListView>
     );
   }
 });
 
-export var stateToProps = (state) => {
-  return {notes: state.notes};
+export var mapStateToProps = (state) => {
+  return {
+    notes: state.notes
+  };
 };
 
-export default connect(stateToProps)(Notes);
+export default connect(mapStateToProps)(Notes);
